@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lizai-gpt</title>
+    <style>
+       *{
+           padding: 0;
+           margin: 0;
+           box-sizing: border-box;
+           background: #120634;
+       }
+       header{
+           width: 100%;
+           padding: 0 26px;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           
+       }
+       .logo{
+           width: 40px;
+           height: 40px;
+           border-radius: 50%;
+           background: #505396;
+       }
+       .logo-name{
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           font-weight: bold;
+           color: #e4e8ec;
+       }
+       .logo-plus{
+           width: 50%;
+           height: 70px;
+           display: flex;
+           position: relative;
+           align-items: center;
+           justify-content: end;
+       }
+       .logo-plus .btn{
+           width:60px;
+           border-radius: 10px;
+           background: #323159;
+           height: 35px;
+           position: absolute;     
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           color: white;
+           font-weight: bold;
+       }
+       .bot-footer{
+           width: 100%;
+           height: 65px;
+           background-color:#33315a;
+           position: absolute;
+           bottom: 0;
+           max-height: 130px;
+           display: flex;
+           
+       }
+       .input{
+           width: 80%;
+           height: 100%;
+           background: transparent;      
+           display: flex;
+           justify-content: center;
+           align-items: center;
+       }
+       .btn-send{
+           width: 20%;
+           height: 100%;
+           background: transparent;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           
+       }
+       .text-input{
+           width: 80%;
+           border: none;
+           height: 70%;
+           line-height: 26px;
+           outline: none;
+           display: flex;
+           align-items: center;
+           color: #e4e8ec;
+           padding: 10px;
+           background: transparent;      
+       }
+       #btn-send{
+           width: 34px;
+           height: 35px;
+           background: transparent;
+         
+       }
+       .chater{
+       width: 100%;
+       overflow: auto;
+       padding: 0 26px;
+       height: 79vh;
+       background: transparent;
+       }
+       .bot-chat{
+         max-width: 200px;
+         padding: 10px;
+         background:  #33315a;
+         border-radius:  0 15px 15px 15px;
+         margin: 15px 0;
+       }
+        .me-chat{
+         max-width: 200px;
+         padding: 10px;
+         background: #555cf7 ;
+         border-radius:  15px  0 15px 15px;
+         margin: 15px 0;
+         margin-left: auto;
+       }
+       .bot-chat span{
+           background: transparent;
+           color:  #e4e8ec;
+       }
+        .me-chat span{
+           background: transparent;
+           color:  #e4e8ec;
+       }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"></div>
+        <div class="logo-name">LIZAI-GPT</div>
+        <div class="logo-plus">
+            <div class="btn">
+              new
+            </div>
+        </div>
+    </header>
+    <div class="chater" id="chater">
+    
+    </div>
+    <div class="bot-footer">
+        <div class="input">
+            <textarea placeholder="Digite algo aqui..." class="text-input" id="inputs"></textarea>
+        </div>
+        <div class="btn-send">
+            <img src="{{ url_for('static', filename='img/ic_send.png') }}" alt="send" id="btn-send">
+        </div>
+    </div>
+    <script>
+  let btn = document.getElementById("btn-send").addEventListener('click', () => {
+ 
+ userdata =document.getElementById("inputs");
+    addnew("me-chat",userdata.value)
+    const url = "http://localhost:8000/api_ghost";
+    let formData = new FormData();
+    formData.append("msg", userdata.value);
+    document.getElementById("inputs").value = "";
+   
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    }).then(response => response.text()).then(data => {
+        addnew("bot-chat",data)
+        data=''
+    }).catch(erro => {
+        console.log(erro);
+    });
+});
+
+function addnew(classe,msg) {
+ const chat=document.getElementById("chater")
+ var item=document.createElement("div")
+ item.classList.add(classe)
+ item.innerHTML=`<span>${msg}</span>`
+ chat.appendChild(item)
+ msg=""
+}
+    </script>
+</body>
+</html>
